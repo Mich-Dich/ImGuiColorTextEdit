@@ -2051,7 +2051,7 @@ void TextEditor::setCursor(DocPos pos) {
 
 void TextEditor::scrollToLine(size_t line, Scroll alignment, float fraction) {
 	ensureVisiblePos = DocPos(invalidLine, 0);
-	scrollToLineNumber = std::min(line, document.size());
+	scrollToLineNumber = std::min(line, document.size() - 1);
 	scrollToAlignment = alignment;
 	scrollToFraction = fraction;
 
@@ -2078,7 +2078,7 @@ void TextEditor::handlePossibleScrolling() {
 			lastVisibleColumn = static_cast<size_t>(std::ceil(textSize.x / glyphSize.x));
 		}
 
-		const auto pos = docPos2VisPos(ensureVisiblePos);
+		const auto pos = docPos2VisPos(normalizePos(ensureVisiblePos));
 
 		if (pos.row <= firstVisibleRow + 1) {
 			scrollY = std::max(0.0f, (pos.row - 2.0f) * glyphSize.y);
